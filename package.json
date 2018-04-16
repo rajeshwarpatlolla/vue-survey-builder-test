@@ -1,9 +1,9 @@
 {
-  "name": "vue-survey-builder",
-  "version": "1.0.0",
+  "name": "vue-survey-builder-test",
+  "version": "0.1.0",
   "description": "A Vue.js project",
   "author": "rajeshwarpatlolla <rajeshwar.patlolla@gmail.com>",
-  "private": true,
+  "private": false,
   "scripts": {
     "dev": "node build/dev-server.js",
     "start": "npm run dev",
