@@ -1,14 +1,14 @@
 <template>
   <div class="sb-content">
-    <select class="sb-select" v-model="question.type" v-on:change="questionTypeChanged(question.type)">
-      <option v-for="(questionType, index) in questionTypes" :value="questionType.value" :key="index" :disabled="questionType.value === 'Default'" :selected="questionType.value === 'default'">{{questionType.label}}</option>
+    <select class="sb-select" v-model="selectedType" v-on:change="questionTypeChanged(selectedType)">
+      <option v-for="(questionType, index) in questionTypes" :value="questionType.value" :key="index" :disabled="questionType.value === 'DEFAULT'" :selected="questionType.value === 'DEFAULT'">{{questionType.label}}</option>
     </select>
-    <div class="question-section" v-if="selectedType !== 'default'">
+    <div class="question-section" v-if="selectedType !== 'DEFAULT'">
       <div class="">
         <div class="sb-choices-text">Question Body</div>
         <input type="text" class="" placeholder="Enter question text" v-model="question.body">
       </div>
-      <div class="" v-if="selectedType === 'boolean'">
+      <div class="" v-if="selectedType === 'BOOLEAN'">
         <div class="sb-choices-text">Answer choices</div>
         <div class="" v-for="(option, index) in question.options" :key="index">
           <div class="clear-both">
@@ -17,7 +17,7 @@
           </div>
         </div>
       </div>
-      <div class="" v-if="selectedType === 'date'">
+      <div class="" v-if="selectedType === 'DATE'">
         <div class="">
           <label class="sb-block"><input type="radio" v-model="question.dateFormat" value="MM/DD/YY"> MM/DD/YY</label>
           <label class="sb-block"><input type="radio" v-model="question.dateFormat" value="DD/MM/YY"> DD/MM/YY</label>
@@ -25,7 +25,7 @@
           <label class="sb-block"><input type="radio" v-model="question.dateFormat" value="DD/MM/YYYY"> DD/MM/YYYY</label>
         </div>
       </div>
-      <div class="" v-if="selectedType === 'multiChoice'">
+      <div class="" v-if="selectedType === 'MULTI_CHOICE'">
         <div class="sb-choices-text">Answer choices</div>
         <div class="" v-for="(option, index) in question.options" :key="index">
           <div class="clear-both">
@@ -38,7 +38,7 @@
         </div>
       </div>
 
-      <div class="" v-if="selectedType === 'number'">
+      <div class="" v-if="selectedType === 'NUMBER'">
         <label class="">
           <input type="checkbox" v-model="question.hasUnits" name="hasUnits" />
           <span class="">Answer label <input type="text" class="" placeholder="ex. mins, lbs, days" v-model="question.units" :disabled="!question.hasUnits"></span>
@@ -56,49 +56,39 @@
           <span class="">Allow decimals</span>
         </label>
       </div>
-      <div class="" v-if="selectedType === 'scale'">
+      <div class="scale-type" v-if="selectedType === 'SCALE'">
         <h5>Scale labels</h5>
         <div class="">
           <div class="">Intervals</div>
-          <div class="">
-            <input type="number" class="" min="2" max="8" v-model="question.intervals" v-on:change="changeLabelsLength(question.intervals)">
+          <div class="intervals">
+            <input type="number" min="2" max="100" v-model="question.intervals" v-on:change="changeLabelsLength(question.intervals)">
           </div>
-          <span class="" v-if="question.reportable">Max of 8 intervals can be entered when dashboard graph option is selected.</span>
+          <span class="" v-if="question.reportable">Max of 100 intervals can be entered.</span>
         </div>
         <div v-if="question.intervals > 0">
           <div class="" v-for="(value, index) in question.labels" :key="index">
             <div v-if="index === 0">
-              <div class="">
-                <span v-if="question.verticalScale">Top</span>
-                <span v-if="!question.verticalScale">Right</span>
-              </div>
+              <div class="">Top</div>
               <div class="">
                 <input type="text" v-on:blur="validateLabels(question.labels.length - index - 1)" class="" placeholder="Enter value" v-model="question.labels[question.labels.length - index - 1]">
-                <span v-if="validLabels.includes(question.labels.length - index - 1)" class="">Labels cannot exceed 16 characters in length</span>
               </div>
             </div>
             <div v-else-if="question.labels && (index === question.labels.length - 1)">
-              <div class="">
-                <span v-if="question.verticalScale">Bottom</span>
-                <span v-if="!question.verticalScale">Left</span>
-              </div>
+              <div class="">Bottom</div>
               <div class="">
                 <input type="text" name="vertical-labels" class="" placeholder="Enter value" v-on:blur="validateLabels(question.labels.length - index - 1)" v-model="question.labels[question.labels.length - index - 1]">
-                <span v-if="validLabels.includes(question.labels.length - index - 1)" class="">Labels cannot exceed 16 characters in length</span>
               </div>
             </div>
             <div v-if="question.labels && index !== 0 && (index !== question.labels.length - 1)">
               <div class=""></div>
               <div class="">
-                <input type="text" class="" placeholder="Enter value" v-on:blur="validateLabels(question.labels.length - index - 1)" v-model="question.labels[question.labels.length - index - 1]" v-if="!question.reportable">
-                <input type="text" class="" placeholder="Enter value" v-on:blur="validateLabels(question.labels.length - index - 1)" v-model="question.labels[question.labels.length - index - 1]" v-if="question.reportable">
-                <span v-if="validLabels.includes(question.labels.length - index - 1)" class="">Labels cannot exceed 16 characters in length</span>
+                <input type="text" class="" placeholder="Enter value" v-on:blur="validateLabels(question.labels.length - index - 1)" v-model="question.labels[question.labels.length - index - 1]">
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="" v-if="selectedType === 'singleChoice'">
+      <div class="" v-if="selectedType === 'SINGLE_CHOICE'">
         <div class="sb-choices-text">Answer choices</div>
         <div class="" v-for="(option, index) in question.options" :key="index">
           <div class="">
@@ -112,13 +102,13 @@
           <a v-on:click="addAnotherAnswer()">Add another answer</a>
         </div>
       </div>
-      <div class="" v-if="selectedType === 'text'">
+      <div class="" v-if="selectedType === 'TEXT'">
         <label class="">
           <input type="checkbox" v-model="question.characterLimited" name="characterLimited" />
           <span class="">Character limit <input type="number" class="char-limit-input" v-model="question.textLimit" placeholder="" min="1" max="2048" :disabled="!question.characterLimited"></span>
         </label>
       </div>
-      <div class="" v-if="selectedType === 'time'">
+      <div class="" v-if="selectedType === 'TIME'">
         <div class="">
           <label class=""><input type="radio" v-model="question.timeFormat" value="12" :disabled="!question.showTime" v-on:click="timeFormatModified(question.timeFormat)"> 12 hrs</label>
           <label class=""><input type="radio" v-model="question.timeFormat" value="24" :disabled="!question.showTime" v-on:click="timeFormatModified(question.timeFormat)"> 24 hrs</label>
@@ -141,18 +131,18 @@ export default {
   name: 'add-edit-questions',
   data() {
     return {
-      selectedType: { value: 'default', lebel: '' },
-      question: { type: 'default' },
+      selectedType: 'DEFAULT',
+      question: { type: 'DEFAULT' },
       questionTypes: [
-        { value: 'default', label: '- Select a question type -' },
-        { value: 'boolean', label: 'Yes or No' },
-        { value: 'date', label: 'Date' },
-        { value: 'multiChoice', label: 'Multiple Choice' },
-        { value: 'number', label: 'Number' },
-        { value: 'scale', label: 'Scale' },
-        { value: 'singleChoice', label: 'Single Choice' },
-        { value: 'text', label: 'Text' },
-        { value: 'time', label: 'Time' },
+        { value: 'DEFAULT', label: '- Select a question type -' },
+        { value: 'BOOLEAN', label: 'Yes or No' },
+        { value: 'DATE', label: 'Date' },
+        { value: 'MULTI_CHOICE', label: 'Multiple Choice' },
+        { value: 'NUMBER', label: 'Number' },
+        { value: 'SCALE', label: 'Scale' },
+        { value: 'SINGLE_CHOICE', label: 'Single Choice' },
+        { value: 'TEXT', label: 'Text' },
+        { value: 'TIME', label: 'Time' },
       ],
     };
   },
@@ -186,13 +176,15 @@ export default {
      * @return {null}
      */
     questionTypeChanged(type) {
-      this.selectedType = type;
+      this.question.type = this.selectedType;
       switch (type) {
-        case 'boolean':
+        case 'BOOLEAN':
           this.question.options = [{ body: 'Yes', sequence: 1 }, { body: 'No', sequence: 2 }];
           break;
-        default:
-          window.console.log('NA');
+        case 'SCALE':
+          this.question.labels.length = 2;
+          break;
+          DEFAULT: window.console.log('NA');
       }
     },
 
@@ -243,7 +235,7 @@ export default {
      */
     cancelQuestion(question) {
       window.console.log(question);
-      this.question = { type: 'default' };
+      this.question = { type: 'DEFAULT' };
     },
 
     /**
@@ -252,6 +244,14 @@ export default {
      */
     deleteQuestion(question) {
       window.console.log(question);
+    },
+
+    /**
+     * @param {Number} intervals
+     * @return {null}
+     */
+    changeLabelsLength(intervals) {
+      this.question.labels.length = intervals;
     },
   },
 };
@@ -407,6 +407,11 @@ $color-green: #48bf7a;
   }
   *:focus {
     outline: none;
+  }
+  .scale-type {
+    .intervals input {
+      width: 60px;
+    }
   }
 }
 </style>

@@ -1,10 +1,7 @@
 <template>
   <div class="row">
     <div v-for="(question, index) in questions" :key="index">
-      <!-- <div v-if="selectedQuestion.id === question.id">
-        <SurveyBuilder :options="selectedQuestion"></SurveyBuilder>
-      </div> -->
-      <div class="card read_only_question cursor_grab">
+      <div class="card read-only-question cursor_grab">
         <div class="row">
           <div class="col-md-9 p-0">
             <div class="question-section">
@@ -14,7 +11,7 @@
               <p class="question_body">{{question.body}}</p>
             </div>
             <div class="answer-section">
-              <div class="option-section" v-if="question.type.toLowerCase() === 'boolean'">
+              <div class="option-section" v-if="question.type === 'BOOLEAN'">
                 <div class="" v-for='(option, index) in question.options' :key="index">
                   <p class="radio-option">
                     <input type="radio" name="boolean_type" disabled>
@@ -22,53 +19,29 @@
                   </p>
                 </div>
               </div>
-              <div class="option-section pad-top20" v-if="question.type.toLowerCase() === 'numberscale'">
-                <vue-slider v-if="!question.verticalScale" ref="slider" :value="question.minValue" :piecewise="true" direction="horizontal" class="horizontal-vue-slider" :min="question.minValue" :max="question.maxValue" :disabled="true"></vue-slider>
-                <vue-slider v-if="question.verticalScale" ref="slider" :value="question.minValue" :piecewise="true" direction="vertical" class="vertical-vue-slider" width="2" :min="question.minValue" :max="question.maxValue" :disabled="true"></vue-slider>
+              <div class="option-section pad-top20" v-if="question.type === 'SCALE'">
+                <vue-slider ref="slider" :value="question.minValue" :piecewise="true" direction="horizontal" class="horizontal-vue-slider" :min="question.minValue" :max="question.maxValue" :disabled="true"></vue-slider>
               </div>
-              <div class="option-section pad-top20" v-if="question.type.toLowerCase() === 'customscale'">
-                <vue-slider v-if="!question.verticalScale" ref="slider" :value="question.labels[0]" :piecewise="true" width="1" direction="horizontal" class="horizontal-vue-slider" :data="question.labels" :disabled="true"></vue-slider>
-                <vue-slider v-if="question.verticalScale" ref="slider" :value="question.labels[0]" :piecewise="true" width="2" direction="vertical" class="vertical-vue-slider" :data="question.labels" :disabled="true"></vue-slider>
-              </div>
-              <div class="option-section" v-if="question.type.toLowerCase() === 'text'">
+              <div class="option-section" v-if="question.type === 'TEXT'">
                 <input type="text" class="input-text readonly" placeholder="" readonly />
               </div>
-              <div class="option-section" v-if="question.type.toLowerCase() === 'date'">
+              <div class="option-section" v-if="question.type === 'DATE'">
                 <div class="col-sm-3 p-0">
                   <input type="text" class="input-text readonly" placeholder="" v-model="question.dateFormat" readonly>
                 </div>
               </div>
-              <div class="option-section" v-if="question.type.toLowerCase() === 'time'">
+              <div class="option-section" v-if="question.type === 'TIME'">
                 <div class="col-sm-3 p-0">
                   <input type="text" class="input-text readonly" placeholder="" :value="question.timeFormat === '12' ? 'HH:MM AM/PM':'HH:MM'" readonly>
                 </div>
               </div>
-              <div class="option-section" v-if="question.type.toLowerCase() === 'number'">
+              <div class="option-section" v-if="question.type === 'NUMBER'">
                 <div class="">
                   <input type="text" class="input-text readonly width-90" placeholder="" readonly>
                   <span v-if="question.hasUnits">{{question.units}}</span>
                 </div>
               </div>
-              <div class="option-section" v-if="question.type.toLowerCase() === 'valuepicker'">
-                <div class="">
-                  <input type="number" class="input-text readonly" placeholder="" readonly>
-                </div>
-              </div>
-              <div class="option-section" v-if="question.type.toLowerCase() === 'imagechoice'">
-                <div class="">
-                </div>
-              </div>
-              <div class="option-section" v-if="question.type.toLowerCase() === 'email'">
-                <div class="">
-                  <input type="email" class="input-text readonly" placeholder="" readonly>
-                </div>
-              </div>
-              <div class="option-section" v-if="question.type.toLowerCase() === 'location'">
-                <div class="">
-                  <input type="text" class="input-text readonly" placeholder="" readonly>
-                </div>
-              </div>
-              <div class="option-section" v-if="question.type.toLowerCase() === 'singlechoice'">
+              <div class="option-section" v-if="question.type === 'SINGLE_CHOICE'">
                 <div v-for='(option, index) in question.options' :key="index">
                   <label>
                     <input type="radio" name="single" disabled>&nbsp;{{option.body}}
@@ -78,20 +51,17 @@
                   </div>
                 </div>
               </div>
-              <div class="option-section" v-if="question.type.toLowerCase() === 'multichoice'">
+              <div class="option-section" v-if="question.type === 'MULTI_CHOICE'">
                 <div v-for='(option, index) in question.options' :key="index">
                   <label>
                     <input type="checkbox" disabled>&nbsp;{{option.body}}
                   </label>
-                  <div class="" v-if="option.imageUrl">
-                    <img :src="option.imageUrl" alt="">
-                  </div>
                 </div>
               </div>
             </div>
           </div>
           <div class="col-md-3 p-0 text-right">
-            <button class="btn btn-default color_blue br-2" v-on:click="editQuestion(question, index)">Edit</button>
+            <button type="button" class="sb-btn-link mr-10 color-red" v-on:click="editQuestion(question, index)">Edit</button>
           </div>
         </div>
       </div>
@@ -104,7 +74,7 @@ import _ from 'lodash';
 import SurveyBuilder from './SurveyBuilder';
 
 export default {
-  name: 'QuestionsList',
+  name: 'QuestionsView',
   data() {
     return {
       selectedQuestion: { id: null },
@@ -174,9 +144,8 @@ h3 {
   color: #959fa4;
 }
 
-.read_only_question {
-  border-left: 8px solid #d3dfe4 !important;
-  background-color: #f5f8fa;
+.read-only-question {
+  background-color: #fafafa;
 }
 
 .icon-style {
@@ -211,27 +180,11 @@ h3 {
 
 // END of style for quick fixes bootstrap after migration (before redesign should be removed)
 
-h1,
-h2,
-h3 {
-  font-weight: 200;
-}
-
 .img-style {
   padding-top: 20px;
   height: 300px;
   width: 500px;
   padding-bottom: 20px;
-}
-
-.question_body {
-  word-break: break-all;
-  color: #959fa4;
-}
-
-.read_only_question {
-  border-left: 8px solid #d3dfe4 !important;
-  background-color: #f5f8fa;
 }
 
 .icon-style {
@@ -365,7 +318,7 @@ input {
   text-indent: 10px;
 }
 
-.date-input {
+.DATE-input {
   border-radius: 20px;
   outline: none;
   border: 1px solid #ccc;
@@ -409,5 +362,47 @@ label {
 }
 .width-90 {
   width: 90% !important;
+}
+.sb-btn-link {
+  border: none;
+  background: none;
+  padding: 5px;
+  color: #f06559;
+  font-size: 14px;
+  margin-top: 16px;
+}
+.slidecontainer {
+  width: 100%;
+}
+
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 25px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: 0.2s;
+  transition: opacity 0.2s;
+}
+
+.slider:hover {
+  opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  background: #4caf50;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  background: #4caf50;
+  cursor: pointer;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="test-survey-builder">
     <h2>This is TestSurveyBuilder component</h2>
-    <QuestionsList :questions="questionsList" />
+    <QuestionsView :questions="questionsList" />
     <div>This is between list and add edit</div>
     <surveyBuilder/>
     <h2>This is TestSurveyBuilder component</h2>
@@ -10,7 +10,7 @@
 
 <script>
 import surveyBuilder from './SurveyBuilder';
-import QuestionsList from './QuestionsList';
+import QuestionsView from './QuestionsView';
 
 export default {
   name: 'TestSurveyBuilder',
@@ -24,11 +24,11 @@ export default {
       this.updateQuestionsList(obj);
     });
   },
-  components: { surveyBuilder, QuestionsList },
+  components: { surveyBuilder, QuestionsView },
   methods: {
     updateQuestionsList(obj) {
       window.console.log(obj);
-      this.questionsList.push(obj.question);
+      this.questionsList.push(JSON.parse(JSON.stringify(obj.question)));
     },
   },
 };
