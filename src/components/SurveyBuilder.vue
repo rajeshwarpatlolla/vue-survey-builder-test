@@ -117,7 +117,7 @@
       <div class="buttons-section">
         <button type="button" class="sb-btn-link mr-10 color-green" @click="saveQuestion(question)">Save</button>
         <button type="button" class="sb-btn-link mr-10 color-blue" @click="cancelQuestion(question)">Cancel</button>
-        <button type="button" class="sb-btn-link mr-10 color-red" @click="deleteQuestion(question)">Delete</button>
+        <!-- <button type="button" class="sb-btn-link mr-10 color-red" @click="deleteQuestion(question)">Delete</button> -->
       </div>
     </div>
   </div>
@@ -130,8 +130,6 @@ export default {
   name: 'add-edit-questions',
   data() {
     return {
-      selectedType: 'DEFAULT',
-      // question: { type: 'DEFAULT' },
       questionTypes: [
         { value: 'DEFAULT', label: '- Select a question type -' },
         { value: 'BOOLEAN', label: 'Yes or No' },
@@ -143,7 +141,8 @@ export default {
         { value: 'TEXT', label: 'Text' },
         { value: 'TIME', label: 'Time' },
       ],
-      question: this.options || { type: 'DEFAULT' },
+      question: this.options,
+      selectedType: null,
     };
   },
   props: ['options'],
@@ -153,23 +152,16 @@ export default {
   created() {},
   beforeMount() {},
   mounted() {
-    window.console.log(this.question);
+    this.question.type = this.question.type ? this.question.type : 'DEFAULT';
+    this.selectedType = this.question.type;
+
+    window.console.log(this.question, this.selectedType);
   },
   beforeUpdate() {},
   updated() {},
   beforeDestroy() {},
   destroyed() {},
   methods: {
-    /**
-     * @param {Number} val1
-     * @param {Number} val2
-     * @return {null}
-     */
-    clicked(inputValue) {
-      window.console.log('clicked and, now in side survey builder');
-      this.$root.$emit('send', inputValue);
-    },
-
     /**
      * @desc {String} type
      * @param {String} type
@@ -239,8 +231,9 @@ export default {
      * @return {null}
      */
     saveQuestion(question) {
-      question.id = this.getGUID(); // eslint-disable-line
-      this.$root.$emit('send', { question, operation: 'save' });
+      question.id = question.id ? question.id : this.getGUID(); // eslint-disable-line
+      this.$root.$emit('add-update-question', { question, operation: 'save' });
+      this.question = { type: 'DEFAULT' };
     },
 
     /**
@@ -272,7 +265,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-$color-primary: #f5f8fa;
+$color-primary: #f8f8f8;
 $color-secondary: #eaf0f4;
 $color-blue: #4c8ce4;
 $color-red: #f06559;
@@ -332,6 +325,7 @@ $color-green: #48bf7a;
   box-shadow: 1px 1px 5px 0px #d3dee3;
   background-color: $color-primary;
   border-radius: 2px;
+  margin: 12px 0;
 
   input[type='text'],
   input[type='number'],

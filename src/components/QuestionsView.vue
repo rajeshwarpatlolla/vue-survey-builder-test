@@ -1,13 +1,12 @@
 <template>
   <div class="row">
-    {{this.selectedQuestion}}
     <div v-for="(question, index) in questions" :key="index">
       <div v-if="selectedQuestion.id === question.id">
         <SurveyBuilder :options="selectedQuestion"></SurveyBuilder>
       </div>
       <div class="card read-only-question cursor_grab" v-if="selectedQuestion.id !== question.id">
         <div class="row">
-          <div class="col-md-9 p-0">
+          <div class="p-0">
             <div class="question-section">
               <p class="question_color">Question
                 <span class="">{{ index + 1 }}:</span>
@@ -18,38 +17,37 @@
               <div class="option-section" v-if="question.type === 'BOOLEAN'">
                 <div class="" v-for='(option, index) in question.options' :key="index">
                   <p class="radio-option">
-                    <input type="radio" name="boolean_type" disabled>
+                    <input type="radio" name="boolean_type" :disabled="readOnly">
                     <label>{{option.body}}</label>
                   </p>
                 </div>
               </div>
               <div class="option-section pad-top20" v-if="question.type === 'SCALE'">
-                {{question}}
                 <vueSlider ref="slider" :data="question.labels" :value="question.minValue" :piecewise="true" direction="horizontal" class="horizontal-vue-slider" :min="question.minValue" :max="question.maxValue" :piecewiseLabel="true"></vueSlider>
               </div>
               <div class="option-section" v-if="question.type === 'TEXT'">
-                <input type="text" class="input-text readonly" placeholder="" readonly />
+                <input type="text" class="input-text readonly" placeholder="" :readonly="readOnly" />
               </div>
               <div class="option-section" v-if="question.type === 'DATE'">
-                <div class="col-sm-3 p-0">
-                  <input type="text" class="input-text readonly" placeholder="" v-model="question.dateFormat" readonly>
+                <div class="p-0">
+                  <input type="text" class="input-text readonly" placeholder="" v-model="question.dateFormat" :readonly="readOnly">
                 </div>
               </div>
               <div class="option-section" v-if="question.type === 'TIME'">
-                <div class="col-sm-3 p-0">
-                  <input type="text" class="input-text readonly" placeholder="" :value="question.timeFormat === '12' ? 'HH:MM AM/PM':'HH:MM'" readonly>
+                <div class="p-0">
+                  <input type="text" class="input-text readonly" placeholder="" :value="question.timeFormat === '12' ? 'HH:MM AM/PM':'HH:MM'" :readonly="readOnly">
                 </div>
               </div>
               <div class="option-section" v-if="question.type === 'NUMBER'">
                 <div class="">
-                  <input type="text" class="input-text readonly width-90" placeholder="" readonly>
+                  <input type="text" class="input-text readonly width-90" placeholder="" :readonly="readOnly">
                   <span v-if="question.hasUnits">{{question.units}}</span>
                 </div>
               </div>
               <div class="option-section" v-if="question.type === 'SINGLE_CHOICE'">
                 <div v-for='(option, index) in question.options' :key="index">
                   <label>
-                    <input type="radio" name="single" disabled>&nbsp;{{option.body}}
+                    <input type="radio" name="single" :disabled="readOnly">&nbsp;{{option.body}}
                   </label>
                   <div class="" v-if="option.imageUrl">
                     <img :src="option.imageUrl" alt="" class="">
@@ -59,13 +57,13 @@
               <div class="option-section" v-if="question.type === 'MULTI_CHOICE'">
                 <div v-for='(option, index) in question.options' :key="index">
                   <label>
-                    <input type="checkbox" disabled>&nbsp;{{option.body}}
+                    <input type="checkbox" :disabled="readOnly">&nbsp;{{option.body}}
                   </label>
                 </div>
               </div>
             </div>
           </div>
-          <div class="col-md-3 p-0 text-right">
+          <div class="p-0 text-right">
             <button type="button" class="sb-btn-link mr-10 color-blue" v-on:click="editQuestion(question, index)">Edit</button>
             <button type="button" class="sb-btn-link mr-10 color-red" v-on:click="deleteQuestion(question, index)">Delete</button>
           </div>
@@ -87,9 +85,14 @@ export default {
       selectedQuestion: { id: null },
     };
   },
-  props: ['questions'],
+  props: ['questions', 'readOnly'],
   components: { SurveyBuilder, vueSlider },
-  mounted() {},
+  mounted() {
+    this.$root.$on('selected-question', obj => {
+      window.console.log(obj);
+      this.selectedQuestion = { id: null };
+    });
+  },
   computed: {},
   watch: {},
   methods: {
@@ -144,38 +147,6 @@ h3 {
   font-size: 16px;
   padding-top: 10px;
   padding-bottom: 30px;
-}
-
-// Style for quick fixes bootstrap after migration (before redesign should be removed)
-
-.option-section {
-  &:after {
-    content: '';
-    clear: both;
-    display: block;
-  }
-  .col-sm-3 {
-    float: left;
-  }
-}
-
-// END of style for quick fixes bootstrap after migration (before redesign should be removed)
-
-.img-style {
-  padding-top: 20px;
-  height: 300px;
-  width: 500px;
-  padding-bottom: 20px;
-}
-
-.icon-style {
-  color: #57dd7a;
-  font-size: 25px;
-  padding-top: 20px;
-  background-color: #d6f0de;
-  padding: 7px;
-  padding-bottom: 3px;
-  border-radius: 25px;
 }
 
 .font-style {

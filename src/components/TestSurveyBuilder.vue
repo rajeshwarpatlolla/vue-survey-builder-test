@@ -1,15 +1,13 @@
 <template>
   <div class="test-survey-builder">
-    <h2>This is TestSurveyBuilder component</h2>
-    <QuestionsView :questions="questionsList" />
-    <div>This is between list and add edit</div>
+    <h2>vue-survey-builder Example</h2>
+    <QuestionsView :questions="questionsList" :readOnly="true" />
     <div v-if="addQuestion">
       <surveyBuilder :options="sampleQuestion" />
     </div>
     <div class="pt-10">
       <button type="button" class="add_another_btn br-25" v-on:click="addNewQuestion()">Add question</button>
     </div>
-    <h2>This is TestSurveyBuilder component</h2>
   </div>
 </template>
 
@@ -27,15 +25,22 @@ export default {
     };
   },
   mounted() {
-    this.$root.$on('send', obj => {
+    this.$root.$on('add-update-question', obj => {
       this.updateQuestionsList(obj);
-      this.addQuestion = false;
     });
   },
   components: { surveyBuilder, QuestionsView },
   methods: {
     updateQuestionsList(obj) {
-      this.questionsList.push(JSON.parse(JSON.stringify(obj.question)));
+      const questionIndex = this.questionsList.findIndex(x => x.id === obj.question.id);
+      if (questionIndex >= 0) {
+        this.questionsList.splice(questionIndex, 1, obj.question);
+      } else {
+        this.questionsList.push(JSON.parse(JSON.stringify(obj.question)));
+      }
+      this.addQuestion = false;
+      this.$root.$emit('selected-question', null);
+      window.console.log(obj.question, this.addQuestion, this.questionsList);
     },
     addNewQuestion() {
       this.sampleQuestion = JSON.parse(JSON.stringify(sampleQuestionObj));
@@ -53,5 +58,6 @@ export default {
   border-color: #4c8ce4;
   color: #4c8ce4;
   padding: 8px;
+  cursor: pointer;
 }
 </style>
