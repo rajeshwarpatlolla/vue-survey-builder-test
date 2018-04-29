@@ -59,8 +59,8 @@
       <div class="scale-type" v-if="selectedType === 'SCALE'">
         <h5>Scale labels</h5>
         <div class="">
-          <div class="">Intervals</div>
-          <div class="intervals">
+          <div class="display-inline-block">Intervals</div>
+          <div class="intervals display-inline-block">
             <input type="number" min="2" max="100" v-model="question.intervals" v-on:change="changeLabelsLength(question.intervals)">
           </div>
           <span class="" v-if="question.reportable">Max of 100 intervals can be entered.</span>
@@ -70,19 +70,19 @@
             <div v-if="index === 0">
               <div class="">Top</div>
               <div class="">
-                <input type="text" v-on:blur="validateLabels(question.labels.length - index - 1)" class="" placeholder="Enter value" v-model="question.labels[question.labels.length - index - 1]">
+                <input type="text" class="" placeholder="Enter value" v-model="question.labels[question.labels.length - index - 1]">
               </div>
             </div>
             <div v-else-if="question.labels && (index === question.labels.length - 1)">
               <div class="">Bottom</div>
               <div class="">
-                <input type="text" name="vertical-labels" class="" placeholder="Enter value" v-on:blur="validateLabels(question.labels.length - index - 1)" v-model="question.labels[question.labels.length - index - 1]">
+                <input type="text" name="vertical-labels" class="" placeholder="Enter value" v-model="question.labels[question.labels.length - index - 1]">
               </div>
             </div>
             <div v-if="question.labels && index !== 0 && (index !== question.labels.length - 1)">
               <div class=""></div>
               <div class="">
-                <input type="text" class="" placeholder="Enter value" v-on:blur="validateLabels(question.labels.length - index - 1)" v-model="question.labels[question.labels.length - index - 1]">
+                <input type="text" class="" placeholder="Enter value" v-model="question.labels[question.labels.length - index - 1]">
               </div>
             </div>
           </div>
@@ -125,14 +125,13 @@
 
 <script>
 import _ from 'lodash';
-import surveyBuilderJson from './survey-builder.json';
 
 export default {
   name: 'add-edit-questions',
   data() {
     return {
       selectedType: 'DEFAULT',
-      question: { type: 'DEFAULT' },
+      // question: { type: 'DEFAULT' },
       questionTypes: [
         { value: 'DEFAULT', label: '- Select a question type -' },
         { value: 'BOOLEAN', label: 'Yes or No' },
@@ -144,6 +143,7 @@ export default {
         { value: 'TEXT', label: 'Text' },
         { value: 'TIME', label: 'Time' },
       ],
+      question: this.options || { type: 'DEFAULT' },
     };
   },
   props: ['options'],
@@ -153,7 +153,6 @@ export default {
   created() {},
   beforeMount() {},
   mounted() {
-    this.question = surveyBuilderJson;
     window.console.log(this.question);
   },
   beforeUpdate() {},
@@ -172,6 +171,7 @@ export default {
     },
 
     /**
+     * @desc {String} type
      * @param {String} type
      * @return {null}
      */
@@ -184,7 +184,8 @@ export default {
         case 'SCALE':
           this.question.labels.length = 2;
           break;
-          DEFAULT: window.console.log('NA');
+        default:
+          window.console.log('Question type not matched');
       }
     },
 
@@ -221,11 +222,24 @@ export default {
     },
 
     /**
+     * @param {null}
+     * @return {String} guid
+     */
+    getGUID() {
+      function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+          .toString(16)
+          .substring(1);
+      }
+      return `${s4() + s4()}-${s4()}-${s4()}-${s4()}-${s4() + s4() + s4()}`;
+    },
+
+    /**
      * @param {Object} question
      * @return {null}
      */
     saveQuestion(question) {
-      window.console.log(question);
+      question.id = this.getGUID(); // eslint-disable-line
       this.$root.$emit('send', { question, operation: 'save' });
     },
 
@@ -363,6 +377,10 @@ $color-green: #48bf7a;
   }
   .display-block {
     display: block;
+    clear: both;
+  }
+  .display-inline-block {
+    display: inline-block;
     clear: both;
   }
   .clear-both {

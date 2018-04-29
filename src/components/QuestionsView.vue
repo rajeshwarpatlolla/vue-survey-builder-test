@@ -1,7 +1,11 @@
 <template>
   <div class="row">
+    {{this.selectedQuestion}}
     <div v-for="(question, index) in questions" :key="index">
-      <div class="card read-only-question cursor_grab">
+      <div v-if="selectedQuestion.id === question.id">
+        <SurveyBuilder :options="selectedQuestion"></SurveyBuilder>
+      </div>
+      <div class="card read-only-question cursor_grab" v-if="selectedQuestion.id !== question.id">
         <div class="row">
           <div class="col-md-9 p-0">
             <div class="question-section">
@@ -20,7 +24,8 @@
                 </div>
               </div>
               <div class="option-section pad-top20" v-if="question.type === 'SCALE'">
-                <vue-slider ref="slider" :value="question.minValue" :piecewise="true" direction="horizontal" class="horizontal-vue-slider" :min="question.minValue" :max="question.maxValue" :disabled="true"></vue-slider>
+                {{question}}
+                <vueSlider ref="slider" :data="question.labels" :value="question.minValue" :piecewise="true" direction="horizontal" class="horizontal-vue-slider" :min="question.minValue" :max="question.maxValue" :piecewiseLabel="true"></vueSlider>
               </div>
               <div class="option-section" v-if="question.type === 'TEXT'">
                 <input type="text" class="input-text readonly" placeholder="" readonly />
@@ -61,7 +66,8 @@
             </div>
           </div>
           <div class="col-md-3 p-0 text-right">
-            <button type="button" class="sb-btn-link mr-10 color-red" v-on:click="editQuestion(question, index)">Edit</button>
+            <button type="button" class="sb-btn-link mr-10 color-blue" v-on:click="editQuestion(question, index)">Edit</button>
+            <button type="button" class="sb-btn-link mr-10 color-red" v-on:click="deleteQuestion(question, index)">Delete</button>
           </div>
         </div>
       </div>
@@ -70,7 +76,8 @@
 </template>
 
 <script>
-import _ from 'lodash';
+// import _ from 'lodash';
+import vueSlider from 'vue-slider-component';
 import SurveyBuilder from './SurveyBuilder';
 
 export default {
@@ -81,7 +88,7 @@ export default {
     };
   },
   props: ['questions'],
-  components: { SurveyBuilder },
+  components: { SurveyBuilder, vueSlider },
   mounted() {},
   computed: {},
   watch: {},
@@ -89,35 +96,9 @@ export default {
     editQuestion(question, index) {
       this.selectedQuestion = JSON.parse(JSON.stringify(question));
       this.selectedQuestion.questionNumber = index + 1;
-      if (this.selectedQuestion.type === 'MultiChoice' && !this.selectedQuestion.bodyImages) {
-        this.selectedQuestion.bodyImages = [
-          {
-            sequence: 1,
-            imageUrl: null,
-            imageId: null,
-          },
-        ];
-      }
-      // this.$store.dispatch('selectedQuestionAction', _.cloneDeep(this.selectedQuestion));
     },
-    clearQuestionSelection(option) {
-      const optionIndex = _.findIndex(this.selectedQuestionForBranching.options, ['id', option.id]);
-      this.selectedQuestionForBranching.options[optionIndex].nextQuestion = 'default'; // eslint-disable-line
-      this.$forceUpdate();
-    },
-    deleteQuestion(question) {
-      this.$api.deleteQuestionFact(this.studyId, this.surveyId, question.id).then(
-        response => {
-          window.console.log(response);
-          window.console.success('Question deleted successfully');
-          const questionIndex = _.findIndex(this.questions, ['id', question.id]);
-          this.questions.splice(questionIndex, 1);
-        },
-        error => {
-          this.errorMsg = error.body ? error.body.message : 'Erorr while deleting the question';
-          window.console.error(this.errorMsg);
-        },
-      );
+    deleteQuestion(question, index) {
+      this.questions.splice(index, 1);
     },
   },
 };
