@@ -1,40 +1,40 @@
 <template>
-  <div class="sb-content">
-    <select class="sb-select" v-model="selectedType" v-on:change="questionTypeChanged(selectedType)">
+  <div class="vue-survey-builder-content vsb-content">
+    <select class="vsb-select" v-model="selectedType" v-on:change="questionTypeChanged(selectedType)">
       <option v-for="(questionType, index) in questionTypes" :value="questionType.value" :key="index" :disabled="questionType.value === 'DEFAULT'" :selected="questionType.value === 'DEFAULT'">{{questionType.label}}</option>
     </select>
     <div class="question-section" v-if="selectedType !== 'DEFAULT'">
-      <div class="">
-        <div class="sb-choices-text">Question Body</div>
+      <div class="pb-10">
+        <div class="vsb-choices-text">Question</div>
         <input type="text" class="" placeholder="Enter question text" v-model="question.body">
       </div>
       <div class="" v-if="selectedType === 'BOOLEAN'">
-        <div class="sb-choices-text">Answer choices</div>
+        <div class="vsb-choices-text">Answer Choices</div>
         <div class="" v-for="(option, index) in question.options" :key="index">
           <div class="clear-both">
             <input type="text" class="width-100 float-left" placeholder="Enter an answer choice" v-model="option.body">
-            <button class="sb-btn-link color-red width-10 mt-10" v-on:click="deleteQuestionOptionItem(question.options, index)" v-if="index > 1">Remove</button>
+            <button class="vsb-btn-link color-red width-10 mt-10" v-on:click="deleteQuestionOptionItem(question.options, index)" v-if="index > 1">Remove</button>
           </div>
         </div>
       </div>
       <div class="" v-if="selectedType === 'DATE'">
         <div class="">
-          <label class="sb-block"><input type="radio" v-model="question.dateFormat" value="MM/DD/YY"> MM/DD/YY</label>
-          <label class="sb-block"><input type="radio" v-model="question.dateFormat" value="DD/MM/YY"> DD/MM/YY</label>
-          <label class="sb-block"><input type="radio" v-model="question.dateFormat" value="MM/DD/YYYY"> MM/DD/YYYY</label>
-          <label class="sb-block"><input type="radio" v-model="question.dateFormat" value="DD/MM/YYYY"> DD/MM/YYYY</label>
+          <label class="vsb-block"><input type="radio" v-model="question.dateFormat" value="MM/DD/YY"> MM/DD/YY</label>
+          <label class="vsb-block"><input type="radio" v-model="question.dateFormat" value="DD/MM/YY"> DD/MM/YY</label>
+          <label class="vsb-block"><input type="radio" v-model="question.dateFormat" value="MM/DD/YYYY"> MM/DD/YYYY</label>
+          <label class="vsb-block"><input type="radio" v-model="question.dateFormat" value="DD/MM/YYYY"> DD/MM/YYYY</label>
         </div>
       </div>
       <div class="" v-if="selectedType === 'MULTI_CHOICE'">
-        <div class="sb-choices-text">Answer choices</div>
+        <div class="vsb-choices-text">Answer Choices</div>
         <div class="" v-for="(option, index) in question.options" :key="index">
           <div class="clear-both">
             <input type="text" class="width-90 float-left" placeholder="Enter an answer choice" v-model="option.body">
-            <button class="sb-btn-link color-red width-10 mt-10" v-on:click="deleteQuestionOptionItem(question.options, index)" v-if="index > 1">Remove</button>
+            <button class="vsb-btn-link color-red width-10 mt-10" v-on:click="deleteQuestionOptionItem(question.options, index)" v-if="index > 1">Remove</button>
           </div>
         </div>
         <div class="display-block">
-          <button class="sb-btn-link color-blue" v-on:click="addAnotherAnswer()">Add another answer</button>
+          <button class="vsb-btn-link color-blue" v-on:click="addAnotherAnswer()">Add another answer</button>
         </div>
       </div>
 
@@ -57,7 +57,7 @@
         </label>
       </div>
       <div class="scale-type" v-if="selectedType === 'SCALE'">
-        <h5>Scale labels</h5>
+        <div>Scale labels</div>
         <div class="">
           <div class="display-inline-block">Intervals</div>
           <div class="intervals display-inline-block">
@@ -68,20 +68,19 @@
         <div v-if="question.intervals > 0">
           <div class="" v-for="(value, index) in question.labels" :key="index">
             <div v-if="index === 0">
-              <div class="">Top</div>
-              <div class="">
+              <div class="width-10 float-left pt-10">Top</div>
+              <div class="width-90">
                 <input type="text" class="" placeholder="Enter value" v-model="question.labels[question.labels.length - index - 1]">
               </div>
             </div>
             <div v-else-if="question.labels && (index === question.labels.length - 1)">
-              <div class="">Bottom</div>
-              <div class="">
+              <div class="width-10 float-left pt-10">Bottom</div>
+              <div class="width-90">
                 <input type="text" name="vertical-labels" class="" placeholder="Enter value" v-model="question.labels[question.labels.length - index - 1]">
               </div>
             </div>
-            <div v-if="question.labels && index !== 0 && (index !== question.labels.length - 1)">
-              <div class=""></div>
-              <div class="">
+            <div class="text-right" v-if="question.labels && index !== 0 && (index !== question.labels.length - 1)">
+              <div class="width-90">
                 <input type="text" class="" placeholder="Enter value" v-model="question.labels[question.labels.length - index - 1]">
               </div>
             </div>
@@ -89,7 +88,7 @@
         </div>
       </div>
       <div class="" v-if="selectedType === 'SINGLE_CHOICE'">
-        <div class="sb-choices-text">Answer choices</div>
+        <div class="vsb-choices-text">Answer Choices</div>
         <div class="" v-for="(option, index) in question.options" :key="index">
           <div class="">
             <input type="text" class="" placeholder="Enter an answer choice" v-model="option.body">
@@ -98,7 +97,7 @@
             <button class="" v-on:click="deleteQuestionOptionItem(question.options, index)" v-if="index > 1">Remove</button>
           </div>
         </div>
-        <div class="sb-add-answer-btn sb-btn-link color-blue">
+        <div class="vsb-add-answer-btn vsb-btn-link color-blue">
           <a v-on:click="addAnotherAnswer()">Add another answer</a>
         </div>
       </div>
@@ -115,9 +114,9 @@
         </div>
       </div>
       <div class="buttons-section">
-        <button type="button" class="sb-btn-link mr-10 color-green" @click="saveQuestion(question)">Save</button>
-        <button type="button" class="sb-btn-link mr-10 color-blue" @click="cancelQuestion(question)">Cancel</button>
-        <!-- <button type="button" class="sb-btn-link mr-10 color-red" @click="deleteQuestion(question)">Delete</button> -->
+        <button type="button" class="vsb-btn-link mr-10 color-green" @click="saveQuestion(question)">Save</button>
+        <button type="button" class="vsb-btn-link mr-10 color-blue" @click="cancelQuestion(question)">Cancel</button>
+        <!-- <button type="button" class="vsb-btn-link mr-10 color-red" @click="deleteQuestion(question)">Delete</button> -->
       </div>
     </div>
   </div>
@@ -317,12 +316,12 @@ $color-green: #48bf7a;
   color: $color-green;
 }
 
-.sb-content {
+.vue-survey-builder-content {
   font-family: Arial, Helvetica, sans-serif;
   font-weight: normal;
-  border: 1px solid #d3dee3;
+  border: 1px solid #ddd;
   padding: 10px;
-  box-shadow: 1px 1px 5px 0px #d3dee3;
+  box-shadow: 1px 1px 5px 0px #ddd;
   background-color: $color-primary;
   border-radius: 2px;
   margin: 12px 0;
@@ -363,11 +362,19 @@ $color-green: #48bf7a;
   .float-right {
     float: right;
   }
+  .text-center {
+    text-align: center;
+  }
+  .text-right {
+    text-align: right;
+  }
   .width-90 {
     width: 90% !important;
+    display: inline-block;
   }
   .width-10 {
     width: 10% !important;
+    display: inline-block;
   }
   .display-block {
     display: block;
@@ -380,7 +387,7 @@ $color-green: #48bf7a;
   .clear-both {
     clear: both;
   }
-  .sb-btn-link {
+  .vsb-btn-link {
     border: none;
     background: none;
     padding: 5px;
@@ -392,16 +399,16 @@ $color-green: #48bf7a;
     margin: auto;
   }
 
-  .sb-block {
+  .vsb-block {
     display: block;
     padding: 5px 0;
   }
 
-  .sb-choices-text {
+  .vsb-choices-text {
     font-size: 16px;
   }
 
-  .sb-select {
+  .vsb-select {
     max-width: 200px;
   }
   .char-limit-input {

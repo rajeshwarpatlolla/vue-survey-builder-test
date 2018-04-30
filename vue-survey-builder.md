@@ -1,10 +1,10 @@
 # vue-survey-builder
 This is a survey builder component for vue.js applications.
 
-### How to use
+### How to install
 You can install the component using `npm i -S vue-survey-builder`
 
-#### Steps to follow
+### Steps to use
 *Step 1:*
 Install is using the above command from npm registry
 There are two components,
@@ -20,7 +20,7 @@ You can import them using
 *Step 2:*
 We are using [this JSON]() to build any type of question. Depending on the type of question, only few keys are used in the whole JSON.
 
-#### Keys of the JSON
+### Keys of the JSON
 - **id** : This is a unique field, which will be created dynamically for every qiestion. This field is required for all type of questions.
 - **type** : This represents the type of the question. The supported types are mentioned [here](). This field is required for all type of questions.
 - **multiSelect** : This represents whether the question is multi select question or not. This is is `false` by default and will be `true` only for `MULTI_CHOICE` question.

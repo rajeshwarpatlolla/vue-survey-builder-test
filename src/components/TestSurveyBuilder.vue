@@ -1,6 +1,6 @@
 <template>
   <div class="test-survey-builder">
-    <h2>vue-survey-builder Example</h2>
+    <h2 class="text-center">Vue Survey Builder Demo</h2>
     <QuestionsView :questions="questionsList" :readOnly="true" />
     <div v-if="addQuestion">
       <surveyBuilder :options="sampleQuestion" />
@@ -59,5 +59,8 @@ export default {
   color: #4c8ce4;
   padding: 8px;
   cursor: pointer;
+}
+.text-center {
+  text-align: center;
 }
 </style>
