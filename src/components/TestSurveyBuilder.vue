@@ -1,6 +1,7 @@
 <template>
   <div class="test-survey-builder">
     <h2 class="text-center">Vue Survey Builder Demo</h2>
+    <hr/>
     <QuestionsView :questions="questionsList" :readOnly="true" />
     <div v-if="addQuestion">
       <SurveyBuilder :options="sampleQuestion" />

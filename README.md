@@ -2,6 +2,8 @@
 
 > A Vue.js project
 
+[![bitHound Dependencies](https://www.bithound.io/github/rajeshwarpatlolla/vue-survey-builder-test/badges/dependencies.svg)](https://www.bithound.io/github/rajeshwarpatlolla/vue-survey-builder-test/master/dependencies/npm)
+
 ## Build Setup
 
 ``` bash
