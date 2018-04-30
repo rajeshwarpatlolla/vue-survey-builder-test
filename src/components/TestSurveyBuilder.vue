@@ -26,22 +26,22 @@ export default {
     };
   },
   mounted() {
-    this.$root.$on('add-update-question', obj => {
-      this.updateQuestionsList(obj);
+    this.$root.$on('add-update-question', q => {
+      this.updateQuestionsList(q);
     });
   },
   components: { SurveyBuilder, QuestionsView },
   methods: {
-    updateQuestionsList(obj) {
-      const questionIndex = this.questionsList.findIndex(x => x.id === obj.question.id);
+    updateQuestionsList(question) {
+      const questionIndex = this.questionsList.findIndex(x => x.id === question.id);
       if (questionIndex >= 0) {
-        this.questionsList.splice(questionIndex, 1, obj.question);
+        this.questionsList.splice(questionIndex, 1, question);
       } else {
-        this.questionsList.push(JSON.parse(JSON.stringify(obj.question)));
+        this.questionsList.push(JSON.parse(JSON.stringify(question)));
       }
       this.addQuestion = false;
       this.$root.$emit('selected-question', null);
-      window.console.log(obj.question, this.addQuestion, this.questionsList);
+      window.console.log(question, this.addQuestion, this.questionsList);
     },
     addNewQuestion() {
       this.sampleQuestion = JSON.parse(JSON.stringify(sampleQuestionObj));
