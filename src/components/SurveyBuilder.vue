@@ -39,19 +39,19 @@
       </div>
 
       <div class="" v-if="selectedType === 'NUMBER'">
-        <label class="">
-          <input type="checkbox" v-model="question.hasUnits" name="hasUnits" />
-          <span class="">Answer label <input type="text" class="" placeholder="ex. mins, lbs, days" v-model="question.units" :disabled="!question.hasUnits"></span>
+        <label class="display-block">
+          <input type="checkbox" class="" v-model="question.hasUnits" name="hasUnits" />
+          <span class="">Answer label <input type="text" class="width-10" placeholder="ex. mins, lbs, days" v-model="question.units" :disabled="!question.hasUnits"></span>
         </label>
-        <label class="">
+        <label class="display-block">
           <input type="checkbox" v-model="question.hasMinMax" name="subType" />
           <span class="">Min/max value
-            <input type="number" class="" v-model="question.minValue" placeholder="min" min="1" max="2048" :disabled="!question.hasMinMax">
-            <span class="">to</span>
-            <input type="number" class="" v-model="question.maxValue" placeholder="max" min="1" max="2048" :disabled="!question.hasMinMax">
+            <input type="number" class="width-10" v-model="question.minValue" placeholder="min" min="1" max="2048" :disabled="!question.hasMinMax">
+            <span class="width-10">to</span>
+            <input type="number" class="width-10" v-model="question.maxValue" placeholder="max" min="1" max="2048" :disabled="!question.hasMinMax">
           </span>
         </label>
-        <label class="">
+        <label class="display-block">
           <input type="checkbox" v-model="question.allowDecimals" value="Single" name="subType" />
           <span class="">Allow decimals</span>
         </label>
@@ -110,8 +110,8 @@
       </div>
       <div class="" v-if="selectedType === 'TIME'">
         <div class="">
-          <label class=""><input type="radio" v-model="question.timeFormat" value="12" :disabled="!question.showTime" v-on:click="timeFormatModified(question.timeFormat)"> 12 hrs</label>
-          <label class=""><input type="radio" v-model="question.timeFormat" value="24" :disabled="!question.showTime" v-on:click="timeFormatModified(question.timeFormat)"> 24 hrs</label>
+          <label class=""><input type="radio" v-model="question.timeFormat" value="12" v-on:click="timeFormatModified(question.timeFormat)"> 12 hrs</label>
+          <label class=""><input type="radio" v-model="question.timeFormat" value="24" v-on:click="timeFormatModified(question.timeFormat)"> 24 hrs</label>
         </div>
       </div>
       <div class="buttons-section">
