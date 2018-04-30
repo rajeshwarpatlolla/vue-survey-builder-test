@@ -1,9 +1,10 @@
 <template>
   <div class="test-survey-builder">
     <h2 class="text-center">Vue Survey Builder Demo</h2>
+    <hr/>
     <QuestionsView :questions="questionsList" :readOnly="true" />
     <div v-if="addQuestion">
-      <surveyBuilder :options="sampleQuestion" />
+      <SurveyBuilder :options="sampleQuestion" />
     </div>
     <div class="pt-10">
       <button type="button" class="add_another_btn br-25" v-on:click="addNewQuestion()">Add question</button>
@@ -12,7 +13,7 @@
 </template>
 
 <script>
-import surveyBuilder from './SurveyBuilder';
+import SurveyBuilder from 'vue-survey-builder';
 import QuestionsView from './QuestionsView';
 import sampleQuestionObj from './survey-builder.json';
 
@@ -29,7 +30,7 @@ export default {
       this.updateQuestionsList(obj);
     });
   },
-  components: { surveyBuilder, QuestionsView },
+  components: { SurveyBuilder, QuestionsView },
   methods: {
     updateQuestionsList(obj) {
       const questionIndex = this.questionsList.findIndex(x => x.id === obj.question.id);

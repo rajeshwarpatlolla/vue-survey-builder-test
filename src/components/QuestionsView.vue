@@ -64,7 +64,7 @@
             </div>
           </div>
           <div class="p-0 text-right">
-            <button type="button" class="sb-btn-link mr-10 color-blue" v-on:click="editQuestion(question, index)">Edit</button>
+            <button type="button" class="sb-btn-link mr-10 color-orange" v-on:click="editQuestion(question, index)">Edit</button>
             <button type="button" class="sb-btn-link mr-10 color-red" v-on:click="deleteQuestion(question, index)">Delete</button>
           </div>
         </div>
@@ -108,6 +108,12 @@ export default {
 </script>
 
 <style scoped lang="scss">
+$color-primary: #f8f8f8;
+$color-secondary: #eaf0f4;
+$color-blue: #4c8ce4;
+$color-orange: #ff9635;
+$color-red: #f06559;
+$color-green: #48bf7a;
 h1,
 h2,
 h3 {
@@ -125,7 +131,7 @@ h3 {
 
 .question_body {
   word-break: break-all;
-  color: #959fa4;
+  color: #555;
 }
 
 .read-only-question {
@@ -166,6 +172,9 @@ h3 {
   width: 80px;
   height: 29px;
   margin-bottom: 50px;
+}
+button {
+  cursor: pointer;
 }
 
 .custom-btn {
@@ -247,16 +256,18 @@ h3 {
 
 .card {
   border: 1px solid rgba(0, 0, 0, 0.125);
-  padding: 15px;
-  margin-bottom: 16px;
+  padding: 12px;
+  margin-bottom: 12px;
 }
 
 .question_color,
 input {
-  color: #666769;
-  font-size: 14px;
+  color: #555;
+  font-size: 16px;
 }
-
+p {
+  margin: 8px 0;
+}
 .radio-option {
   margin: 0px;
 }
@@ -306,7 +317,7 @@ input {
 label {
   font-weight: normal !important;
   word-break: break-all;
-  color: #959fa4;
+  color: #555;
 }
 
 .modal-dialog {
@@ -322,6 +333,18 @@ label {
   color: #f06559;
   font-size: 14px;
   margin-top: 16px;
+}
+.color-blue {
+  color: $color-blue;
+}
+.color-orange {
+  color: $color-orange;
+}
+.color-red {
+  color: $color-red;
+}
+.color-green {
+  color: $color-green;
 }
 .slidecontainer {
   width: 100%;

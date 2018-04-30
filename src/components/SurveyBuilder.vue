@@ -123,10 +123,8 @@
 </template>
 
 <script>
-import _ from 'lodash';
-
 export default {
-  name: 'add-edit-questions',
+  name: 'SurveyBuilder',
   data() {
     return {
       questionTypes: [
@@ -196,7 +194,7 @@ export default {
       if (!this.question.options) {
         this.question.options = [];
       }
-      let maxSequence = Number(_.max(_.map(this.question.options, 'sequence')));
+      let maxSequence = Number(Math.max(...this.question.options.map(x => x.sequence)));
       if (!maxSequence) {
         maxSequence = this.question.options.length;
       }
@@ -267,6 +265,7 @@ export default {
 $color-primary: #f8f8f8;
 $color-secondary: #eaf0f4;
 $color-blue: #4c8ce4;
+$color-orange: #ff9635;
 $color-red: #f06559;
 $color-green: #48bf7a;
 
@@ -308,6 +307,9 @@ $color-green: #48bf7a;
 
 .color-blue {
   color: $color-blue;
+}
+.color-orange {
+  color: $color-orange;
 }
 .color-red {
   color: $color-red;
