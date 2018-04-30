@@ -1,10 +1,10 @@
-## vue-survey-builder
+# vue-survey-builder
 This is a survey builder component for vue.js applications.
 
-#### How to use
+### How to use
 You can install the component using `npm i -S vue-survey-builder`
 
-##### Steps to follow
+#### Steps to follow
 *Step 1:*
 Install is using the above command from npm registry
 There are two components,
@@ -12,13 +12,15 @@ There are two components,
 2. **QuestionsView**: You can use this to view the list of questions added.
 
 You can import them using
+
 `import { SurveyBuilder } from 'SurveyBuilder';`
+
 `import { QuestionsView } from 'SurveyBuilder';`
 
 *Step 2:*
 We are using [this JSON]() to build any type of question. Depending on the type of question, only few keys are used in the whole JSON.
 
-##### Keys of the JSON
+#### Keys of the JSON
 - **id** : This is a unique field, which will be created dynamically for every qiestion. This field is required for all type of questions.
 - **type** : This represents the type of the question. The supported types are mentioned [here](). This field is required for all type of questions.
 - **multiSelect** : This represents whether the question is multi select question or not. This is is `false` by default and will be `true` only for `MULTI_CHOICE` question.
@@ -36,7 +38,7 @@ We are using [this JSON]() to build any type of question. Depending on the type 
 - **units** : This represents the units to be shown. This field will be used for `NUMBER` type of questions.
 - **options** : This represents the options of question. This field is used by `SINGLE_CHOICE` and `MULTI_CHOICE` questions.
 
-#### Supported Question types
+### Supported Question types
 - BOOLEAN
 - SINGLE_CHOICE
 - MULTI_CHOICE
@@ -46,26 +48,26 @@ We are using [this JSON]() to build any type of question. Depending on the type 
 - DATE
 - TIME
 
-#### Demo
+### Demo
 You can see the demo [here]()
 
-#### Demo Source Code
+### Demo Source Code
 Please look at the sample code [here]()
 
-#### Versions
-##### 0.1.0
+### Versions
+#### 0.1.0
 This version is the initial official release of this component. It has all the required functionalities to build the surveys using vue.js
 
-#### To-Do List
+### To-Do List
 - Support for rating question
 - Improve JSON
 - Introduce drag and drop
 
-#### Contributors
+### Contributors
 [Rajeshwar Patlolla](https://github.com/rajeshwarpatlolla)
 
-#### Organisation
+### Organisation
 [Fission Labs](http://fissionlabs.com/)
 
-#### LICENSE
+### LICENSE
 Please read it [here]()
