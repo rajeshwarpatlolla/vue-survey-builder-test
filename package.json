@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "ejs": "^2.5.7",
-    "lodash": "^4.17.5",
+    "lodash": "^4.17.13",
     "vue": "^2.5.17",
     "vue-router": "^3.0.1",
     "vue-slider-component": "^2.6.2",
