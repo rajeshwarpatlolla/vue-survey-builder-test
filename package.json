@@ -15,8 +15,8 @@
   },
   "dependencies": {
     "ejs": "^2.5.7",
-    "lodash": "^4.17.4",
-    "vue": "^2.5.2",
+    "lodash": "^4.17.5",
+    "vue": "^2.5.17",
     "vue-router": "^3.0.1",
     "vue-slider-component": "^2.6.2",
     "vue-survey-builder": "0.0.4"
