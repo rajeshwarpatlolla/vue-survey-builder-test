@@ -7,14 +7,15 @@
       <SurveyBuilder :options="sampleQuestion" />
     </div>
     <div class="pt-10">
-      <button type="button" class="add_another_btn br-25" v-on:click="addNewQuestion()">Add question</button>
+      <button type="button" class="add_another_btn br-25"
+      @click="addNewQuestion()">Add question</button>
     </div>
   </div>
 </template>
 
 <script>
-import SurveyBuilder from 'vue-survey-builder';
-import QuestionsView from './QuestionsView';
+import SurveyBuilder from './SurveyBuilder.vue';
+import QuestionsView from './QuestionsView.vue';
 import sampleQuestionObj from './survey-builder.json';
 
 export default {
@@ -26,14 +27,15 @@ export default {
     };
   },
   mounted() {
-    this.$root.$on('add-update-question', q => {
+    this.$root.$on('add-update-question', (q) => {
       this.updateQuestionsList(q);
     });
   },
   components: { SurveyBuilder, QuestionsView },
   methods: {
-    updateQuestionsList(question) {
-      const questionIndex = this.questionsList.findIndex(x => x.id === question.id);
+    updateQuestionsList(q) {
+      const question = q?.question;
+      const questionIndex = this.questionsList.findIndex((x) => x.id === question.id);
       if (questionIndex >= 0) {
         this.questionsList.splice(questionIndex, 1, question);
       } else {
